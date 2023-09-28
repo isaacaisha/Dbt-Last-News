@@ -16,13 +16,19 @@ def index():
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--headless")
 
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--disable-software-rasterizer")
+
+    chrome_options.add_argument("--enable-logging")
+    chrome_options.add_argument("--log-level=0")
+
     driver = webdriver.Chrome(options=chrome_options)
 
     # Open a website
     driver.get("https://edition.cnn.com/")
 
     # Wait for a few seconds to ensure the page is loaded
-    driver.implicitly_wait(5)
+    driver.implicitly_wait(37)
 
     # Get the page source using Selenium
     page_source = driver.page_source

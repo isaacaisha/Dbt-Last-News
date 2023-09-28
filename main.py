@@ -4,16 +4,14 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 import urllib.parse
 from datetime import datetime
-import chromedriver_autoinstaller  # Import chromedriver_autoinstaller
+import os
 
 app = Flask(__name__)
 Bootstrap(app)
 
+
 @app.route('/')
 def index():
-    # Initialize ChromeDriver using chromedriver_autoinstaller
-    chromedriver_autoinstaller.install()  # This will ensure the appropriate ChromeDriver version is installed.
-
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--headless")
@@ -54,4 +52,4 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))

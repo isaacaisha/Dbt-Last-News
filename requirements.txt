@@ -2,7 +2,6 @@ attrs==23.1.0
 beautifulsoup4==4.12.2
 blinker==1.6.2
 certifi==2023.7.22
-chromedriver-autoinstaller==0.6.2
 click==8.1.7
 dominate==2.8.0
 exceptiongroup==1.1.3

@@ -20,7 +20,6 @@ def index():
     chrome_options.add_argument("--headless")
     chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_BIN')  # Use the Heroku-provided Chrome binary
 
-
     # Use chromedriver_autoinstaller to ensure you have the correct ChromeDriver version
     chromedriver_autoinstaller.install()
 

@@ -2,17 +2,23 @@ from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
 from bs4 import BeautifulSoup
 from selenium import webdriver
-import urllib.parse  # Import urllib.parse for URL joining
+import urllib.parse
 from datetime import datetime
+import chromedriver_autoinstaller  # Import chromedriver_autoinstaller
 
 app = Flask(__name__)
 Bootstrap(app)
 
-
 @app.route('/')
 def index():
-    # Initialize the web driver (use an appropriate driver path)
-    driver = webdriver.Chrome()
+    # Initialize ChromeDriver using chromedriver_autoinstaller
+    chromedriver_autoinstaller.install()  # This will ensure the appropriate ChromeDriver version is installed.
+
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--headless")
+
+    driver = webdriver.Chrome(options=chrome_options)
 
     # Open a website
     driver.get("https://edition.cnn.com/")
@@ -36,7 +42,7 @@ def index():
         title_text = title_element.get_text()
         parent_element = title_element.find_parent("a")
         if parent_element:
-            link = urllib.parse.urljoin(base_url, parent_element.get("href"))  # Join base URL with link
+            link = urllib.parse.urljoin(base_url, parent_element.get("href"))  # Join base URL with a link
             headline_data.append({"title": title_text, "link": link})
 
     # Close the web browser

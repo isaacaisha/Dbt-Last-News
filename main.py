@@ -28,7 +28,7 @@ def index():
     driver.get("https://edition.cnn.com/")
 
     # Wait for a few seconds to ensure the page is loaded
-    driver.implicitly_wait(37)
+    driver.implicitly_wait(91)
 
     # Get the page source using Selenium
     page_source = driver.page_source

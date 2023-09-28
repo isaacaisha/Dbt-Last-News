@@ -1,5 +1,6 @@
 from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
+import chromedriver_autoinstaller
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import urllib.parse
@@ -12,6 +13,9 @@ Bootstrap(app)
 
 @app.route('/')
 def index():
+    # Automatically download and install ChromeDriver
+    chromedriver_autoinstaller.install()
+
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--headless")

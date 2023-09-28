@@ -1,8 +1,9 @@
 from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
 import chromedriver_autoinstaller
-from bs4 import BeautifulSoup
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+from bs4 import BeautifulSoup
 import urllib.parse
 from datetime import datetime
 import os
@@ -13,19 +14,17 @@ Bootstrap(app)
 
 @app.route('/')
 def index():
-    # Automatically download and install ChromeDriver
-    chromedriver_autoinstaller.install()
-
+    # Set Chrome options
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--disable-gpu")
-    chrome_options.add_argument("--disable-software-rasterizer")
-    chrome_options.add_argument("--disable-dev-shm-usage")  # Add this line
-    chrome_options.add_argument("--disable-extensions")
-    chrome_options.add_argument("--disable-popup-blocking")
-    chrome_options.add_argument("--window-size=1920x1080")  # Set a reasonable window size
+    chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_BIN')  # Use the Heroku-provided Chrome binary
 
+
+    # Use chromedriver_autoinstaller to ensure you have the correct ChromeDriver version
+    chromedriver_autoinstaller.install()
+
+    # Initialize the ChromeDriver with options and executable path
     driver = webdriver.Chrome(options=chrome_options)
 
     # Open a website

@@ -15,12 +15,12 @@ def index():
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--headless")
-
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--disable-software-rasterizer")
-
-    chrome_options.add_argument("--enable-logging")
-    chrome_options.add_argument("--log-level=0")
+    chrome_options.add_argument("--disable-dev-shm-usage")  # Add this line
+    chrome_options.add_argument("--disable-extensions")
+    chrome_options.add_argument("--disable-popup-blocking")
+    chrome_options.add_argument("--window-size=1920x1080")  # Set a reasonable window size
 
     driver = webdriver.Chrome(options=chrome_options)
 

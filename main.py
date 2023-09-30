@@ -4,7 +4,6 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 import urllib.parse
 from datetime import datetime
-import subprocess
 import shutil
 
 
@@ -22,20 +21,20 @@ def find_chrome_binary_path():
     return None
 
 
-# Get the path to the Chrome binary
-chrome_binary_path = find_chrome_binary_path()
-
-if chrome_binary_path:
-    print(f"Found Chrome binary at: {chrome_binary_path}")
-else:
-    print("Chrome binary not found.")
-
 app = Flask(__name__)
 Bootstrap(app)
 
 
 @app.route('/')
 def index():
+    # Get the path to the Chrome binary
+    chrome_binary_path = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+
+    if chrome_binary_path:
+        print(f"Found Chrome binary at: {chrome_binary_path}")
+    else:
+        print("Chrome binary not found.")
+
     chrome_options = webdriver.ChromeOptions()
     if chrome_binary_path:
         chrome_options.binary_location = chrome_binary_path

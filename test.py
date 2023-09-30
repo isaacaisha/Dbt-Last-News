@@ -28,7 +28,7 @@ Bootstrap(app)
 @app.route('/')
 def index():
     # Get the path to the Chrome binary
-    chrome_binary_path = '/Users/lesanebyby/Desktop/Google Chrome'
+    chrome_binary_path = '/Users/lesanebyby/Desktop/chromedriver'
 
     if chrome_binary_path:
         print(f"Found Chrome binary at: {chrome_binary_path}")
@@ -81,4 +81,4 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5005)

@@ -1,12 +1,9 @@
 from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
-import chromedriver_autoinstaller
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
-import urllib.parse
+from selenium import webdriver
+import urllib.parse  # Import urllib.parse for URL joining
 from datetime import datetime
-import os
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -14,23 +11,14 @@ Bootstrap(app)
 
 @app.route('/')
 def index():
-    # Set Chrome options
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--headless")
-    chrome_options.binary_location = os.environ.get('GOOGLE_CHROME_BIN')  # Use the Heroku-provided Chrome binary
-
-    # Use chromedriver_autoinstaller to ensure you have the correct ChromeDriver version
-    chromedriver_autoinstaller.install()
-
-    # Initialize the ChromeDriver with options and executable path
-    driver = webdriver.Chrome(options=chrome_options)
+    # Initialize the web driver (use an appropriate driver path)
+    driver = webdriver.Chrome()
 
     # Open a website
     driver.get("https://edition.cnn.com/")
 
     # Wait for a few seconds to ensure the page is loaded
-    driver.implicitly_wait(91)
+    driver.implicitly_wait(5)
 
     # Get the page source using Selenium
     page_source = driver.page_source
@@ -48,7 +36,7 @@ def index():
         title_text = title_element.get_text()
         parent_element = title_element.find_parent("a")
         if parent_element:
-            link = urllib.parse.urljoin(base_url, parent_element.get("href"))  # Join base URL with a link
+            link = urllib.parse.urljoin(base_url, parent_element.get("href"))  # Join base URL with link
             headline_data.append({"title": title_text, "link": link})
 
     # Close the web browser
@@ -60,4 +48,4 @@ def index():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    app.run(debug=True, host='0.0.0.0', port=5000)

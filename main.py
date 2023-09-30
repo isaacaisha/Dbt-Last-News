@@ -28,7 +28,7 @@ Bootstrap(app)
 @app.route('/')
 def index():
     # Get the path to the Chrome binary
-    chrome_binary_path = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+    chrome_binary_path = find_chrome_binary_path()
 
     if chrome_binary_path:
         print(f"Found Chrome binary at: {chrome_binary_path}")
@@ -47,7 +47,7 @@ def index():
     driver.get("https://edition.cnn.com/")
 
     # Wait for a few seconds to ensure the page is loaded
-    driver.implicitly_wait(5)
+    driver.implicitly_wait(19)
 
     # Get the page source using Selenium
     page_source = driver.page_source

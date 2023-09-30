@@ -2,8 +2,33 @@ from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
 from bs4 import BeautifulSoup
 from selenium import webdriver
-import urllib.parse  # Import urllib.parse for URL joining
+import urllib.parse
 from datetime import datetime
+import subprocess
+import shutil
+
+
+def find_chrome_binary_path():
+    # Check if Google Chrome is installed
+    chrome_path = shutil.which('google-chrome')
+    if chrome_path:
+        return chrome_path
+
+    # Check if Chromium is installed
+    chromium_path = shutil.which('chromium-browser')
+    if chromium_path:
+        return chromium_path
+
+    return None
+
+
+# Get the path to the Chrome binary
+chrome_binary_path = find_chrome_binary_path()
+
+if chrome_binary_path:
+    print(f"Found Chrome binary at: {chrome_binary_path}")
+else:
+    print("Chrome binary not found.")
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -11,8 +36,13 @@ Bootstrap(app)
 
 @app.route('/')
 def index():
-    # Initialize the web driver (use an appropriate driver path)
-    driver = webdriver.Chrome()
+    chrome_options = webdriver.ChromeOptions()
+    if chrome_binary_path:
+        chrome_options.binary_location = chrome_binary_path
+    chrome_options.add_argument('--headless')
+
+    # Initialize the ChromeDriver with options and executable path
+    driver = webdriver.Chrome(options=chrome_options)
 
     # Open a website
     driver.get("https://edition.cnn.com/")

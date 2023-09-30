@@ -7,29 +7,47 @@ from datetime import datetime
 import shutil
 
 
+def find_chrome_binary_path():
+    # Check if Google Chrome is installed
+    chrome_path = shutil.which('google-chrome')
+    if chrome_path:
+        return chrome_path
+
+    # Check if Chromium is installed
+    chromium_path = shutil.which('chromium-browser')
+    if chromium_path:
+        return chromium_path
+
+    return None
+
+
 app = Flask(__name__)
 Bootstrap(app)
 
 
 @app.route('/')
 def index():
-    # Specify the path to the new ChromeDriver executable you downloaded
-    chrome_driver_path = '/Users/lesanebyby/Desktop/chromedriver'
+    # Get the path to the Chrome binary
+    chrome_binary_path = '/Users/lesanebyby/Desktop/Google Chrome'
+
+    if chrome_binary_path:
+        print(f"Found Chrome binary at: {chrome_binary_path}")
+    else:
+        print("Chrome binary not found.")
 
     chrome_options = webdriver.ChromeOptions()
+    if chrome_binary_path:
+        chrome_options.binary_location = chrome_binary_path
     chrome_options.add_argument('--headless')
-    chrome_options.binary_location = '/Users/lesanebyby/Desktop/Google Chrome'  # Set the path to Chrome binary
 
-    # Initialize the ChromeDriver with options
+    # Initialize the ChromeDriver with options and executable path
     driver = webdriver.Chrome(options=chrome_options)
 
-    print(f"ChromeDriver version: {driver.capabilities['chrome']['chromedriverVersion']}")
-
     # Open a website
-    driver.get("https://edition.cnn.com/")
+    driver.get('https://www.20minutes.fr/')
 
     # Wait for a few seconds to ensure the page is loaded
-    driver.implicitly_wait(9)
+    driver.implicitly_wait(7)
 
     # Get the page source using Selenium
     page_source = driver.page_source
@@ -38,17 +56,21 @@ def index():
     soup = BeautifulSoup(page_source, "html.parser")
 
     # Find all news headline title elements by their CSS selector
-    news_headline_titles = soup.select("div > div > div > a > div > div > span")
+    news_headline_titles = soup.select("#page-content > section > div.lt-hoth-section-content > div > article > a > div > h2")
 
     # Extract headline titles and links into a list of dictionaries
     headline_data = []
-    base_url = 'https://edition.cnn.com/'  # Define the base URL
+    base_url = 'https://www.lemonde.fr/'  # Define the base URL
     for title_element in news_headline_titles:
         title_text = title_element.get_text()
         parent_element = title_element.find_parent("a")
         if parent_element:
             link = urllib.parse.urljoin(base_url, parent_element.get("href"))  # Join base URL with link
             headline_data.append({"title": title_text, "link": link})
+
+        print(title_text)
+
+    #input('Press Enter to quit')
 
     # Close the web browser
     driver.quit()
